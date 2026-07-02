@@ -3,7 +3,6 @@ import numpy as np
 from torch import nn
 from einops.layers.torch import Rearrange
 
-
 class FeedForward(nn.Module):
     def __init__(self, dim, hidden_dim, dropout = 0.):
         super().__init__()
@@ -48,7 +47,7 @@ class MLPMixer(nn.Module):
     def __init__(self, in_channels, dim, num_classes, patch_size, image_size, depth, token_dim, channel_dim,dropout):
         super().__init__()
 
-        assert image_size % patch_size == 0, 'Image dimensions must be divisible by the patch size.'
+        assert image_size % patch_size == 0, 
         self.num_patch =  (image_size// patch_size) ** 2
         self.to_patch_embedding = nn.Sequential(
             nn.Conv2d(in_channels, dim, patch_size, patch_size),
