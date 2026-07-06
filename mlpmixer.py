@@ -41,10 +41,9 @@ class MixerBlock(nn.Module):
 
         return x
 
-
 class MLPMixer(nn.Module):
 
-    def __init__(self, in_channels, dim, num_classes, patch_size, image_size, depth, token_dim, channel_dim,dropout):
+    def __init__(self, in_channels, dim, num_classes, patch_size, image_size, depth, token_dim, channel_dim, dropout):
         super().__init__()
 
         assert image_size % patch_size == 0, 
@@ -57,7 +56,7 @@ class MLPMixer(nn.Module):
         self.mixer_blocks = nn.ModuleList([])
 
         for _ in range(depth):
-            self.mixer_blocks.append(MixerBlock(dim, self.num_patch, token_dim, channel_dim,dropout))
+            self.mixer_blocks.append(MixerBlock(dim, self.num_patch, token_dim, channel_dim, dropout))
 
         self.layer_norm = nn.LayerNorm(dim)
 
@@ -66,7 +65,6 @@ class MLPMixer(nn.Module):
         )
 
     def forward(self, x):
-
 
         x = self.to_patch_embedding(x)
 
@@ -78,11 +76,3 @@ class MLPMixer(nn.Module):
         x = x.mean(dim=1)
 
         return self.mlp_head(x)
-
-
-
-
-
-
-
-
