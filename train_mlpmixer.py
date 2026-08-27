@@ -15,23 +15,23 @@ Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 ])
 
 training_data = datasets.CIFAR10(
-                                       root='data',
-                                       train=True,
-                                       download=True,
-                                       transform=transform 
+                                       root = 'data',
+                                       train = True,
+                                       download = True,
+                                       transform = transform 
                                        )
 
 test_data = datasets.CIFAR10(
-                                       root='data',
-                                       train=False,
-                                       download=True,
-                                       transform=transform 
+                                       root = 'data',
+                                       train = False,
+                                       download = True,
+                                       transform = transform 
                                        )                                       
                                      
 batch_size = 128
 
-train_dataloader = DataLoader(training_data, batch_size=batch_size,shuffle=True)
-test_dataloader = DataLoader(test_data, batch_size=batch_size)
+train_dataloader = DataLoader(training_data, batch_size = batch_size, shuffle = True)
+test_dataloader = DataLoader(test_data, batch_size = batch_size)
 
 for X, y in test_dataloader:
     print(f"Shape of X [N,C,H,W]:{X.shape}")
@@ -42,22 +42,20 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"using {device} device") 
 
 model = MLPMixer(
-
-    image_size=32,
-    patch_size=4,
-    in_channels=3,
-    num_classes=10,
-    dim=256,
-    token_dim=256,
-    channel_dim=256,
-    depth=4,
-    dropout=0.5
-    
+    image_size = 32,
+    patch_size = 4,
+    in_channels = 3,
+    num_classes = 10,
+    dim = 256,
+    token_dim = 256,
+    channel_dim = 256,
+    depth = 4,
+    dropout = 0.5  
 ).to(device)
 print(model)
 
 loss_fn = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(),lr=1e-3)
+optimizer = torch.optim.Adam(model.parameters(), lr = 1e-3)
 
 def train(dataloader, model, loss_fn, optimizer):
     size = len(dataloader.dataset)
@@ -69,7 +67,7 @@ def train(dataloader, model, loss_fn, optimizer):
         X, y = X.to(device), y.to(device)
             
         pred = model(X)
-        loss = loss_fn(pred,y)
+        loss = loss_fn(pred, y)
               
         optimizer.zero_grad()
         loss.backward()
@@ -83,8 +81,8 @@ def train(dataloader, model, loss_fn, optimizer):
 
     train_loss /= num_batches
     train_accuracy = 100. * correct.item() / size
-    print(f"Train Metric: \n Accuracy: {(100*correct):>0.1f}% \n")
-    return train_loss,train_accuracy 
+    print(f"Train Metric: \n Accuracy: {(100 * correct):>0.1f}% \n")
+    return train_loss, train_accuracy 
 
 def test(dataloader, model, loss_fn):
     size = len(dataloader.dataset)            
@@ -100,8 +98,8 @@ def test(dataloader, model, loss_fn):
             correct += (pred.argmax(1) == y).type(torch.float).sum().item()
     test_loss /= num_batches
     correct /= size
-    print(f"Test Metrics: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")  
-    test_accuracy = 100*correct      
+    print(f"Test Metrics: \n Accuracy: {(100 * correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")  
+    test_accuracy = 100 * correct      
     return test_loss, test_accuracy
 
 logname = "/PATH/MLP_Mixer_Uniform/Experiments_cifar10/logs_mlpmixeruniform/logs_cifar10.csv"
