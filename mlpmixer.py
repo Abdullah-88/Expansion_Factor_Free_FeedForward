@@ -73,6 +73,6 @@ class MLPMixer(nn.Module):
 
         x = self.layer_norm(x)
 
-        x = x.mean(dim=1)
+        x = x.mean(dim = 1)
 
         return self.mlp_head(x)
